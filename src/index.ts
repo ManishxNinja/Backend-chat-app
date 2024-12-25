@@ -1,10 +1,6 @@
-import { PrismaClient } from "@prisma/client";
-import { WebSocketServer, WebSocket } from "ws";
-import cors from "cors"
-import  express  from "express"
-import z, { string } from "zod"
-const prisma = new PrismaClient();
 
+import { WebSocketServer, WebSocket } from "ws";
+const PORT = process.env.PORT || 8080; 
 interface User {
   socket: WebSocket;
   room: string
@@ -12,7 +8,7 @@ interface User {
   
 let allSockets: User[] = [];
 
-const wss = new WebSocketServer({port: 8080});
+const wss = new WebSocketServer({port: PORT});
 
 wss.on('connection', (socket) => {
 
