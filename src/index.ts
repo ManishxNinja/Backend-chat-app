@@ -1,6 +1,5 @@
 
 import { WebSocketServer, WebSocket } from "ws";
-const PORT = process.env.PORT || 8080; 
 interface User {
   socket: WebSocket;
   room: string
@@ -8,7 +7,7 @@ interface User {
   
 let allSockets: User[] = [];
 
-const wss = new WebSocketServer({port: PORT});
+const wss = new WebSocketServer({port: 8080});
 
 wss.on('connection', (socket) => {
 
