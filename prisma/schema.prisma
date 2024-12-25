@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId // Use auto() for MongoDB's ObjectId
+  userName  String   @unique
+  members   Member[] // Relation to the Member model (logical, not enforced)
+  servers   Server[] 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Server {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId // Use auto() for MongoDB's ObjectId
+  name      String   @unique
+  ownerId   String   // References the owner (User)
+  members   Member[] // Relation to the Member model (logical, not enforced)
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Member {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId // Use auto() for MongoDB's ObjectId
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  serverId String @db.ObjectId
+  server   Server   @relation(fields: [serverId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
